@@ -47,6 +47,10 @@ gramatic = {
     "END": ["TRUE", "FALSE", "PROPOSITIONAL_VAR", "RPAREN"]
 }
 
+operators_values = {
+    "o": "or", "^": "and", "=>" : "si", "<=>": "si y solo si"
+}
+
 
 expression = []
 def checkGramatic(value):
@@ -166,14 +170,26 @@ def evaluateExpressions(tokens, initialVal=""):
         index += 1
     return currentExpression
 
-# pattern = re.compile("[pqrstuvwxyz]")
 
-# pattern = re.compile("^p$|^q$|^r$|^s$|^t$|^u$|^v$|^w$|^x$|^y$|^z$")
-# if pattern.match("m"):
-#     print("success")
-# else:
-#     print("lol")
-
+def dump_expression(tokens):
+    string = ""
+    for index, token in enumerate(tokens):
+        if token.type=="OPERATOR":
+            if index == 0:
+                string += operators_values[token.value]
+            else:
+                string += " " + operators_values[token.value]
+        elif token.type == "PROPOSITIONAL_VAR" or token.type == "LPAREN" or token.type == "RPAREN":
+            if index == 0:
+                string += token.value
+            else:
+                string += " " + token.value
+        else:
+            if index == 0:
+                string += token.type
+            else:
+                string += " " + token.type
+    return string
 
 def t_newline(t):
     r'\n+'
@@ -212,6 +228,10 @@ while True:
 
 print(expression)
 tree = evaluateExpressions(expression)
+#FALTA SOLOP ASEGURARSE DEL ARBOLITO
 print(tree)
+# INCISO 5 hecho solo es esto!!
+print(dump_expression(expression))
+
 
 
