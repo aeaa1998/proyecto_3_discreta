@@ -20,7 +20,7 @@ tokens = (
 )
 
 # t_EXPRESSION = r'([p-z]|[0-1])(\~|\^|=>|<=>|o)([p-z]|[0-1])'
-t_PROPOSITIONAL_VAR = r'p|q|r|s|t|u|v|w|x|y|z'
+t_PROPOSITIONAL_VAR = r'[p-z]'
 t_TRUE = r'1'
 t_FALSE = r'0'
 t_NOT = r'\~'
