@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'FALSE LPAREN NOT OPERATOR PROPOSITIONAL_VAR RPAREN TRUE\n        calc : expression\n        | empty\n    \n    empty :\n    \n    expression : expression OPERATOR expression\n    | expression OPERATOR PROPOSITIONAL_VAR\n    | expression OPERATOR TRUE\n    | expression OPERATOR FALSE\n    \n    expression_negated : NOT expression\n    | NOT expression_negated\n    | NOT TRUE\n    | NOT FALSE\n    | NOT PROPOSITIONAL_VAR\n    \n    expression : PROPOSITIONAL_VAR\n    | TRUE\n    | FALSE\n    | expression\n    | expression_negated\n    \n    expression : LPAREN expression RPAREN\n    '
+_lr_signature = 'FALSE LPAREN NOT OPERATOR PROPOSITIONAL_VAR RPAREN TRUE\n        calc : expression\n        | empty\n    \n    empty :\n    \n    expression : expression OPERATOR expression\n    | expression OPERATOR PROPOSITIONAL_VAR\n    | expression OPERATOR TRUE\n    | expression OPERATOR FALSE\n    \n    expression_negated : NOT expression\n    | NOT expression_negated\n    | NOT TRUE\n    | NOT FALSE\n    | NOT expression_paren\n    | NOT PROPOSITIONAL_VAR\n    \n    expression : PROPOSITIONAL_VAR\n    | TRUE\n    | FALSE\n    | expression_negated\n    | expression_paren\n    | expression\n    \n    expression_paren : LPAREN expression RPAREN\n    '
     
-_lr_action_items = {'PROPOSITIONAL_VAR':([0,8,9,10,],[4,4,16,18,]),'TRUE':([0,8,9,10,],[5,5,14,19,]),'FALSE':([0,8,9,10,],[6,6,15,20,]),'LPAREN':([0,8,9,10,],[8,8,8,8,]),'$end':([0,1,2,3,4,5,6,7,12,13,14,15,16,17,18,19,20,21,],[-3,0,-1,-2,-13,-14,-15,-17,-8,-9,-10,-11,-12,-4,-5,-6,-7,-18,]),'NOT':([0,8,9,10,],[9,9,9,9,]),'OPERATOR':([2,4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,],[10,-13,-14,-15,-17,10,10,-9,-10,-11,-12,10,-5,-6,-7,-18,]),'RPAREN':([4,5,6,7,11,12,13,14,15,16,17,18,19,20,21,],[-13,-14,-15,-17,21,-8,-9,-10,-11,-12,-4,-5,-6,-7,-18,]),}
+_lr_action_items = {'PROPOSITIONAL_VAR':([0,9,10,11,],[4,17,4,20,]),'TRUE':([0,9,10,11,],[5,14,5,21,]),'FALSE':([0,9,10,11,],[6,15,6,22,]),'$end':([0,1,2,3,4,5,6,7,8,12,13,14,15,16,17,19,20,21,22,23,],[-3,0,-1,-2,-14,-15,-16,-17,-18,-8,-9,-10,-11,-12,-13,-4,-5,-6,-7,-20,]),'NOT':([0,9,10,11,],[9,9,9,9,]),'LPAREN':([0,9,10,11,],[10,10,10,10,]),'OPERATOR':([2,4,5,6,7,8,12,13,14,15,16,17,18,19,20,21,22,23,],[11,-14,-15,-16,-17,-18,11,-9,-10,-11,-12,-13,11,11,-5,-6,-7,-20,]),'RPAREN':([4,5,6,7,8,12,13,14,15,16,17,18,19,20,21,22,23,],[-14,-15,-16,-17,-18,-8,-9,-10,-11,-12,-13,23,-4,-5,-6,-7,-20,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'calc':([0,],[1,]),'expression':([0,8,9,10,],[2,11,12,17,]),'empty':([0,],[3,]),'expression_negated':([0,8,9,10,],[7,7,13,7,]),}
+_lr_goto_items = {'calc':([0,],[1,]),'expression':([0,9,10,11,],[2,12,18,19,]),'empty':([0,],[3,]),'expression_negated':([0,9,10,11,],[7,13,7,7,]),'expression_paren':([0,9,10,11,],[8,16,8,8,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -38,11 +38,13 @@ _lr_productions = [
   ('expression_negated -> NOT expression_negated','expression_negated',2,'p_expression_negated','parser.py',127),
   ('expression_negated -> NOT TRUE','expression_negated',2,'p_expression_negated','parser.py',128),
   ('expression_negated -> NOT FALSE','expression_negated',2,'p_expression_negated','parser.py',129),
-  ('expression_negated -> NOT PROPOSITIONAL_VAR','expression_negated',2,'p_expression_negated','parser.py',130),
-  ('expression -> PROPOSITIONAL_VAR','expression',1,'p_expression_simple','parser.py',136),
-  ('expression -> TRUE','expression',1,'p_expression_simple','parser.py',137),
-  ('expression -> FALSE','expression',1,'p_expression_simple','parser.py',138),
-  ('expression -> expression','expression',1,'p_expression_simple','parser.py',139),
+  ('expression_negated -> NOT expression_paren','expression_negated',2,'p_expression_negated','parser.py',130),
+  ('expression_negated -> NOT PROPOSITIONAL_VAR','expression_negated',2,'p_expression_negated','parser.py',131),
+  ('expression -> PROPOSITIONAL_VAR','expression',1,'p_expression_simple','parser.py',137),
+  ('expression -> TRUE','expression',1,'p_expression_simple','parser.py',138),
+  ('expression -> FALSE','expression',1,'p_expression_simple','parser.py',139),
   ('expression -> expression_negated','expression',1,'p_expression_simple','parser.py',140),
-  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_parentesis','parser.py',146),
+  ('expression -> expression_paren','expression',1,'p_expression_simple','parser.py',141),
+  ('expression -> expression','expression',1,'p_expression_simple','parser.py',142),
+  ('expression_paren -> LPAREN expression RPAREN','expression_paren',3,'p_expression_parentesis','parser.py',148),
 ]

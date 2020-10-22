@@ -14,31 +14,34 @@ Rule 8     expression_negated -> NOT expression
 Rule 9     expression_negated -> NOT expression_negated
 Rule 10    expression_negated -> NOT TRUE
 Rule 11    expression_negated -> NOT FALSE
-Rule 12    expression_negated -> NOT PROPOSITIONAL_VAR
-Rule 13    expression -> PROPOSITIONAL_VAR
-Rule 14    expression -> TRUE
-Rule 15    expression -> FALSE
-Rule 16    expression -> expression
+Rule 12    expression_negated -> NOT expression_paren
+Rule 13    expression_negated -> NOT PROPOSITIONAL_VAR
+Rule 14    expression -> PROPOSITIONAL_VAR
+Rule 15    expression -> TRUE
+Rule 16    expression -> FALSE
 Rule 17    expression -> expression_negated
-Rule 18    expression -> LPAREN expression RPAREN
+Rule 18    expression -> expression_paren
+Rule 19    expression -> expression
+Rule 20    expression_paren -> LPAREN expression RPAREN
 
 Terminals, with rules where they appear
 
-FALSE                : 7 11 15
-LPAREN               : 18
-NOT                  : 8 9 10 11 12
+FALSE                : 7 11 16
+LPAREN               : 20
+NOT                  : 8 9 10 11 12 13
 OPERATOR             : 4 5 6 7
-PROPOSITIONAL_VAR    : 5 12 13
-RPAREN               : 18
-TRUE                 : 6 10 14
+PROPOSITIONAL_VAR    : 5 13 14
+RPAREN               : 20
+TRUE                 : 6 10 15
 error                : 
 
 Nonterminals, with rules where they appear
 
 calc                 : 0
 empty                : 2
-expression           : 1 4 4 5 6 7 8 16 18
+expression           : 1 4 4 5 6 7 8 19 20
 expression_negated   : 9 17
+expression_paren     : 12 18
 
 Parsing method: LALR
 
@@ -51,30 +54,33 @@ state 0
     (5) expression -> . expression OPERATOR PROPOSITIONAL_VAR
     (6) expression -> . expression OPERATOR TRUE
     (7) expression -> . expression OPERATOR FALSE
-    (13) expression -> . PROPOSITIONAL_VAR
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
-    (16) expression -> . expression
+    (14) expression -> . PROPOSITIONAL_VAR
+    (15) expression -> . TRUE
+    (16) expression -> . FALSE
     (17) expression -> . expression_negated
-    (18) expression -> . LPAREN expression RPAREN
+    (18) expression -> . expression_paren
+    (19) expression -> . expression
     (3) empty -> .
     (8) expression_negated -> . NOT expression
     (9) expression_negated -> . NOT expression_negated
     (10) expression_negated -> . NOT TRUE
     (11) expression_negated -> . NOT FALSE
-    (12) expression_negated -> . NOT PROPOSITIONAL_VAR
+    (12) expression_negated -> . NOT expression_paren
+    (13) expression_negated -> . NOT PROPOSITIONAL_VAR
+    (20) expression_paren -> . LPAREN expression RPAREN
 
     PROPOSITIONAL_VAR shift and go to state 4
     TRUE            shift and go to state 5
     FALSE           shift and go to state 6
-    LPAREN          shift and go to state 8
     $end            reduce using rule 3 (empty -> .)
     NOT             shift and go to state 9
+    LPAREN          shift and go to state 10
 
     calc                           shift and go to state 1
     expression                     shift and go to state 2
     empty                          shift and go to state 3
     expression_negated             shift and go to state 7
+    expression_paren               shift and go to state 8
 
 state 1
 
@@ -89,15 +95,15 @@ state 2
     (5) expression -> expression . OPERATOR PROPOSITIONAL_VAR
     (6) expression -> expression . OPERATOR TRUE
     (7) expression -> expression . OPERATOR FALSE
-    (16) expression -> expression .
+    (19) expression -> expression .
 
   ! shift/reduce conflict for OPERATOR resolved as shift
   ! reduce/reduce conflict for $end resolved using rule 1 (calc -> expression .)
     $end            reduce using rule 1 (calc -> expression .)
-    OPERATOR        shift and go to state 10
+    OPERATOR        shift and go to state 11
 
-  ! OPERATOR        [ reduce using rule 16 (expression -> expression .) ]
-  ! $end            [ reduce using rule 16 (expression -> expression .) ]
+  ! OPERATOR        [ reduce using rule 19 (expression -> expression .) ]
+  ! $end            [ reduce using rule 19 (expression -> expression .) ]
 
 
 state 3
@@ -109,29 +115,29 @@ state 3
 
 state 4
 
-    (13) expression -> PROPOSITIONAL_VAR .
+    (14) expression -> PROPOSITIONAL_VAR .
 
-    OPERATOR        reduce using rule 13 (expression -> PROPOSITIONAL_VAR .)
-    $end            reduce using rule 13 (expression -> PROPOSITIONAL_VAR .)
-    RPAREN          reduce using rule 13 (expression -> PROPOSITIONAL_VAR .)
+    OPERATOR        reduce using rule 14 (expression -> PROPOSITIONAL_VAR .)
+    $end            reduce using rule 14 (expression -> PROPOSITIONAL_VAR .)
+    RPAREN          reduce using rule 14 (expression -> PROPOSITIONAL_VAR .)
 
 
 state 5
 
-    (14) expression -> TRUE .
+    (15) expression -> TRUE .
 
-    OPERATOR        reduce using rule 14 (expression -> TRUE .)
-    $end            reduce using rule 14 (expression -> TRUE .)
-    RPAREN          reduce using rule 14 (expression -> TRUE .)
+    OPERATOR        reduce using rule 15 (expression -> TRUE .)
+    $end            reduce using rule 15 (expression -> TRUE .)
+    RPAREN          reduce using rule 15 (expression -> TRUE .)
 
 
 state 6
 
-    (15) expression -> FALSE .
+    (16) expression -> FALSE .
 
-    OPERATOR        reduce using rule 15 (expression -> FALSE .)
-    $end            reduce using rule 15 (expression -> FALSE .)
-    RPAREN          reduce using rule 15 (expression -> FALSE .)
+    OPERATOR        reduce using rule 16 (expression -> FALSE .)
+    $end            reduce using rule 16 (expression -> FALSE .)
+    RPAREN          reduce using rule 16 (expression -> FALSE .)
 
 
 state 7
@@ -145,31 +151,12 @@ state 7
 
 state 8
 
-    (18) expression -> LPAREN . expression RPAREN
-    (4) expression -> . expression OPERATOR expression
-    (5) expression -> . expression OPERATOR PROPOSITIONAL_VAR
-    (6) expression -> . expression OPERATOR TRUE
-    (7) expression -> . expression OPERATOR FALSE
-    (13) expression -> . PROPOSITIONAL_VAR
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
-    (16) expression -> . expression
-    (17) expression -> . expression_negated
-    (18) expression -> . LPAREN expression RPAREN
-    (8) expression_negated -> . NOT expression
-    (9) expression_negated -> . NOT expression_negated
-    (10) expression_negated -> . NOT TRUE
-    (11) expression_negated -> . NOT FALSE
-    (12) expression_negated -> . NOT PROPOSITIONAL_VAR
+    (18) expression -> expression_paren .
 
-    PROPOSITIONAL_VAR shift and go to state 4
-    TRUE            shift and go to state 5
-    FALSE           shift and go to state 6
-    LPAREN          shift and go to state 8
-    NOT             shift and go to state 9
+    OPERATOR        reduce using rule 18 (expression -> expression_paren .)
+    $end            reduce using rule 18 (expression -> expression_paren .)
+    RPAREN          reduce using rule 18 (expression -> expression_paren .)
 
-    expression                     shift and go to state 11
-    expression_negated             shift and go to state 7
 
 state 9
 
@@ -177,33 +164,68 @@ state 9
     (9) expression_negated -> NOT . expression_negated
     (10) expression_negated -> NOT . TRUE
     (11) expression_negated -> NOT . FALSE
-    (12) expression_negated -> NOT . PROPOSITIONAL_VAR
+    (12) expression_negated -> NOT . expression_paren
+    (13) expression_negated -> NOT . PROPOSITIONAL_VAR
     (4) expression -> . expression OPERATOR expression
     (5) expression -> . expression OPERATOR PROPOSITIONAL_VAR
     (6) expression -> . expression OPERATOR TRUE
     (7) expression -> . expression OPERATOR FALSE
-    (13) expression -> . PROPOSITIONAL_VAR
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
-    (16) expression -> . expression
+    (14) expression -> . PROPOSITIONAL_VAR
+    (15) expression -> . TRUE
+    (16) expression -> . FALSE
     (17) expression -> . expression_negated
-    (18) expression -> . LPAREN expression RPAREN
+    (18) expression -> . expression_paren
+    (19) expression -> . expression
     (8) expression_negated -> . NOT expression
     (9) expression_negated -> . NOT expression_negated
     (10) expression_negated -> . NOT TRUE
     (11) expression_negated -> . NOT FALSE
-    (12) expression_negated -> . NOT PROPOSITIONAL_VAR
+    (12) expression_negated -> . NOT expression_paren
+    (13) expression_negated -> . NOT PROPOSITIONAL_VAR
+    (20) expression_paren -> . LPAREN expression RPAREN
 
     TRUE            shift and go to state 14
     FALSE           shift and go to state 15
-    PROPOSITIONAL_VAR shift and go to state 16
-    LPAREN          shift and go to state 8
+    PROPOSITIONAL_VAR shift and go to state 17
     NOT             shift and go to state 9
+    LPAREN          shift and go to state 10
 
     expression                     shift and go to state 12
     expression_negated             shift and go to state 13
+    expression_paren               shift and go to state 16
 
 state 10
+
+    (20) expression_paren -> LPAREN . expression RPAREN
+    (4) expression -> . expression OPERATOR expression
+    (5) expression -> . expression OPERATOR PROPOSITIONAL_VAR
+    (6) expression -> . expression OPERATOR TRUE
+    (7) expression -> . expression OPERATOR FALSE
+    (14) expression -> . PROPOSITIONAL_VAR
+    (15) expression -> . TRUE
+    (16) expression -> . FALSE
+    (17) expression -> . expression_negated
+    (18) expression -> . expression_paren
+    (19) expression -> . expression
+    (8) expression_negated -> . NOT expression
+    (9) expression_negated -> . NOT expression_negated
+    (10) expression_negated -> . NOT TRUE
+    (11) expression_negated -> . NOT FALSE
+    (12) expression_negated -> . NOT expression_paren
+    (13) expression_negated -> . NOT PROPOSITIONAL_VAR
+    (20) expression_paren -> . LPAREN expression RPAREN
+
+    PROPOSITIONAL_VAR shift and go to state 4
+    TRUE            shift and go to state 5
+    FALSE           shift and go to state 6
+    NOT             shift and go to state 9
+    LPAREN          shift and go to state 10
+
+    expression                     shift and go to state 18
+    expression_negated             shift and go to state 7
+    expression_paren               shift and go to state 8
+
+state 11
 
     (4) expression -> expression OPERATOR . expression
     (5) expression -> expression OPERATOR . PROPOSITIONAL_VAR
@@ -213,44 +235,29 @@ state 10
     (5) expression -> . expression OPERATOR PROPOSITIONAL_VAR
     (6) expression -> . expression OPERATOR TRUE
     (7) expression -> . expression OPERATOR FALSE
-    (13) expression -> . PROPOSITIONAL_VAR
-    (14) expression -> . TRUE
-    (15) expression -> . FALSE
-    (16) expression -> . expression
+    (14) expression -> . PROPOSITIONAL_VAR
+    (15) expression -> . TRUE
+    (16) expression -> . FALSE
     (17) expression -> . expression_negated
-    (18) expression -> . LPAREN expression RPAREN
+    (18) expression -> . expression_paren
+    (19) expression -> . expression
     (8) expression_negated -> . NOT expression
     (9) expression_negated -> . NOT expression_negated
     (10) expression_negated -> . NOT TRUE
     (11) expression_negated -> . NOT FALSE
-    (12) expression_negated -> . NOT PROPOSITIONAL_VAR
+    (12) expression_negated -> . NOT expression_paren
+    (13) expression_negated -> . NOT PROPOSITIONAL_VAR
+    (20) expression_paren -> . LPAREN expression RPAREN
 
-    PROPOSITIONAL_VAR shift and go to state 18
-    TRUE            shift and go to state 19
-    FALSE           shift and go to state 20
-    LPAREN          shift and go to state 8
+    PROPOSITIONAL_VAR shift and go to state 20
+    TRUE            shift and go to state 21
+    FALSE           shift and go to state 22
     NOT             shift and go to state 9
+    LPAREN          shift and go to state 10
 
-    expression                     shift and go to state 17
+    expression                     shift and go to state 19
     expression_negated             shift and go to state 7
-
-state 11
-
-    (18) expression -> LPAREN expression . RPAREN
-    (4) expression -> expression . OPERATOR expression
-    (5) expression -> expression . OPERATOR PROPOSITIONAL_VAR
-    (6) expression -> expression . OPERATOR TRUE
-    (7) expression -> expression . OPERATOR FALSE
-    (16) expression -> expression .
-
-  ! shift/reduce conflict for RPAREN resolved as shift
-  ! shift/reduce conflict for OPERATOR resolved as shift
-    RPAREN          shift and go to state 21
-    OPERATOR        shift and go to state 10
-
-  ! RPAREN          [ reduce using rule 16 (expression -> expression .) ]
-  ! OPERATOR        [ reduce using rule 16 (expression -> expression .) ]
-
+    expression_paren               shift and go to state 8
 
 state 12
 
@@ -259,7 +266,7 @@ state 12
     (5) expression -> expression . OPERATOR PROPOSITIONAL_VAR
     (6) expression -> expression . OPERATOR TRUE
     (7) expression -> expression . OPERATOR FALSE
-    (16) expression -> expression .
+    (19) expression -> expression .
 
   ! shift/reduce conflict for OPERATOR resolved as shift
   ! shift/reduce conflict for OPERATOR resolved as shift
@@ -267,12 +274,12 @@ state 12
   ! reduce/reduce conflict for RPAREN resolved using rule 8 (expression_negated -> NOT expression .)
     $end            reduce using rule 8 (expression_negated -> NOT expression .)
     RPAREN          reduce using rule 8 (expression_negated -> NOT expression .)
-    OPERATOR        shift and go to state 10
+    OPERATOR        shift and go to state 11
 
   ! OPERATOR        [ reduce using rule 8 (expression_negated -> NOT expression .) ]
-  ! OPERATOR        [ reduce using rule 16 (expression -> expression .) ]
-  ! $end            [ reduce using rule 16 (expression -> expression .) ]
-  ! RPAREN          [ reduce using rule 16 (expression -> expression .) ]
+  ! OPERATOR        [ reduce using rule 19 (expression -> expression .) ]
+  ! $end            [ reduce using rule 19 (expression -> expression .) ]
+  ! RPAREN          [ reduce using rule 19 (expression -> expression .) ]
 
 
 state 13
@@ -295,7 +302,7 @@ state 13
 state 14
 
     (10) expression_negated -> NOT TRUE .
-    (14) expression -> TRUE .
+    (15) expression -> TRUE .
 
   ! reduce/reduce conflict for OPERATOR resolved using rule 10 (expression_negated -> NOT TRUE .)
   ! reduce/reduce conflict for $end resolved using rule 10 (expression_negated -> NOT TRUE .)
@@ -304,15 +311,15 @@ state 14
     $end            reduce using rule 10 (expression_negated -> NOT TRUE .)
     RPAREN          reduce using rule 10 (expression_negated -> NOT TRUE .)
 
-  ! OPERATOR        [ reduce using rule 14 (expression -> TRUE .) ]
-  ! $end            [ reduce using rule 14 (expression -> TRUE .) ]
-  ! RPAREN          [ reduce using rule 14 (expression -> TRUE .) ]
+  ! OPERATOR        [ reduce using rule 15 (expression -> TRUE .) ]
+  ! $end            [ reduce using rule 15 (expression -> TRUE .) ]
+  ! RPAREN          [ reduce using rule 15 (expression -> TRUE .) ]
 
 
 state 15
 
     (11) expression_negated -> NOT FALSE .
-    (15) expression -> FALSE .
+    (16) expression -> FALSE .
 
   ! reduce/reduce conflict for OPERATOR resolved using rule 11 (expression_negated -> NOT FALSE .)
   ! reduce/reduce conflict for $end resolved using rule 11 (expression_negated -> NOT FALSE .)
@@ -321,36 +328,71 @@ state 15
     $end            reduce using rule 11 (expression_negated -> NOT FALSE .)
     RPAREN          reduce using rule 11 (expression_negated -> NOT FALSE .)
 
-  ! OPERATOR        [ reduce using rule 15 (expression -> FALSE .) ]
-  ! $end            [ reduce using rule 15 (expression -> FALSE .) ]
-  ! RPAREN          [ reduce using rule 15 (expression -> FALSE .) ]
+  ! OPERATOR        [ reduce using rule 16 (expression -> FALSE .) ]
+  ! $end            [ reduce using rule 16 (expression -> FALSE .) ]
+  ! RPAREN          [ reduce using rule 16 (expression -> FALSE .) ]
 
 
 state 16
 
-    (12) expression_negated -> NOT PROPOSITIONAL_VAR .
-    (13) expression -> PROPOSITIONAL_VAR .
+    (12) expression_negated -> NOT expression_paren .
+    (18) expression -> expression_paren .
 
-  ! reduce/reduce conflict for OPERATOR resolved using rule 12 (expression_negated -> NOT PROPOSITIONAL_VAR .)
-  ! reduce/reduce conflict for $end resolved using rule 12 (expression_negated -> NOT PROPOSITIONAL_VAR .)
-  ! reduce/reduce conflict for RPAREN resolved using rule 12 (expression_negated -> NOT PROPOSITIONAL_VAR .)
-    OPERATOR        reduce using rule 12 (expression_negated -> NOT PROPOSITIONAL_VAR .)
-    $end            reduce using rule 12 (expression_negated -> NOT PROPOSITIONAL_VAR .)
-    RPAREN          reduce using rule 12 (expression_negated -> NOT PROPOSITIONAL_VAR .)
+  ! reduce/reduce conflict for OPERATOR resolved using rule 12 (expression_negated -> NOT expression_paren .)
+  ! reduce/reduce conflict for $end resolved using rule 12 (expression_negated -> NOT expression_paren .)
+  ! reduce/reduce conflict for RPAREN resolved using rule 12 (expression_negated -> NOT expression_paren .)
+    OPERATOR        reduce using rule 12 (expression_negated -> NOT expression_paren .)
+    $end            reduce using rule 12 (expression_negated -> NOT expression_paren .)
+    RPAREN          reduce using rule 12 (expression_negated -> NOT expression_paren .)
 
-  ! OPERATOR        [ reduce using rule 13 (expression -> PROPOSITIONAL_VAR .) ]
-  ! $end            [ reduce using rule 13 (expression -> PROPOSITIONAL_VAR .) ]
-  ! RPAREN          [ reduce using rule 13 (expression -> PROPOSITIONAL_VAR .) ]
+  ! OPERATOR        [ reduce using rule 18 (expression -> expression_paren .) ]
+  ! $end            [ reduce using rule 18 (expression -> expression_paren .) ]
+  ! RPAREN          [ reduce using rule 18 (expression -> expression_paren .) ]
 
 
 state 17
+
+    (13) expression_negated -> NOT PROPOSITIONAL_VAR .
+    (14) expression -> PROPOSITIONAL_VAR .
+
+  ! reduce/reduce conflict for OPERATOR resolved using rule 13 (expression_negated -> NOT PROPOSITIONAL_VAR .)
+  ! reduce/reduce conflict for $end resolved using rule 13 (expression_negated -> NOT PROPOSITIONAL_VAR .)
+  ! reduce/reduce conflict for RPAREN resolved using rule 13 (expression_negated -> NOT PROPOSITIONAL_VAR .)
+    OPERATOR        reduce using rule 13 (expression_negated -> NOT PROPOSITIONAL_VAR .)
+    $end            reduce using rule 13 (expression_negated -> NOT PROPOSITIONAL_VAR .)
+    RPAREN          reduce using rule 13 (expression_negated -> NOT PROPOSITIONAL_VAR .)
+
+  ! OPERATOR        [ reduce using rule 14 (expression -> PROPOSITIONAL_VAR .) ]
+  ! $end            [ reduce using rule 14 (expression -> PROPOSITIONAL_VAR .) ]
+  ! RPAREN          [ reduce using rule 14 (expression -> PROPOSITIONAL_VAR .) ]
+
+
+state 18
+
+    (20) expression_paren -> LPAREN expression . RPAREN
+    (4) expression -> expression . OPERATOR expression
+    (5) expression -> expression . OPERATOR PROPOSITIONAL_VAR
+    (6) expression -> expression . OPERATOR TRUE
+    (7) expression -> expression . OPERATOR FALSE
+    (19) expression -> expression .
+
+  ! shift/reduce conflict for RPAREN resolved as shift
+  ! shift/reduce conflict for OPERATOR resolved as shift
+    RPAREN          shift and go to state 23
+    OPERATOR        shift and go to state 11
+
+  ! RPAREN          [ reduce using rule 19 (expression -> expression .) ]
+  ! OPERATOR        [ reduce using rule 19 (expression -> expression .) ]
+
+
+state 19
 
     (4) expression -> expression OPERATOR expression .
     (4) expression -> expression . OPERATOR expression
     (5) expression -> expression . OPERATOR PROPOSITIONAL_VAR
     (6) expression -> expression . OPERATOR TRUE
     (7) expression -> expression . OPERATOR FALSE
-    (16) expression -> expression .
+    (19) expression -> expression .
 
   ! shift/reduce conflict for OPERATOR resolved as shift
   ! shift/reduce conflict for OPERATOR resolved as shift
@@ -358,18 +400,18 @@ state 17
   ! reduce/reduce conflict for RPAREN resolved using rule 4 (expression -> expression OPERATOR expression .)
     $end            reduce using rule 4 (expression -> expression OPERATOR expression .)
     RPAREN          reduce using rule 4 (expression -> expression OPERATOR expression .)
-    OPERATOR        shift and go to state 10
+    OPERATOR        shift and go to state 11
 
   ! OPERATOR        [ reduce using rule 4 (expression -> expression OPERATOR expression .) ]
-  ! OPERATOR        [ reduce using rule 16 (expression -> expression .) ]
-  ! $end            [ reduce using rule 16 (expression -> expression .) ]
-  ! RPAREN          [ reduce using rule 16 (expression -> expression .) ]
+  ! OPERATOR        [ reduce using rule 19 (expression -> expression .) ]
+  ! $end            [ reduce using rule 19 (expression -> expression .) ]
+  ! RPAREN          [ reduce using rule 19 (expression -> expression .) ]
 
 
-state 18
+state 20
 
     (5) expression -> expression OPERATOR PROPOSITIONAL_VAR .
-    (13) expression -> PROPOSITIONAL_VAR .
+    (14) expression -> PROPOSITIONAL_VAR .
 
   ! reduce/reduce conflict for OPERATOR resolved using rule 5 (expression -> expression OPERATOR PROPOSITIONAL_VAR .)
   ! reduce/reduce conflict for $end resolved using rule 5 (expression -> expression OPERATOR PROPOSITIONAL_VAR .)
@@ -378,15 +420,15 @@ state 18
     $end            reduce using rule 5 (expression -> expression OPERATOR PROPOSITIONAL_VAR .)
     RPAREN          reduce using rule 5 (expression -> expression OPERATOR PROPOSITIONAL_VAR .)
 
-  ! OPERATOR        [ reduce using rule 13 (expression -> PROPOSITIONAL_VAR .) ]
-  ! $end            [ reduce using rule 13 (expression -> PROPOSITIONAL_VAR .) ]
-  ! RPAREN          [ reduce using rule 13 (expression -> PROPOSITIONAL_VAR .) ]
+  ! OPERATOR        [ reduce using rule 14 (expression -> PROPOSITIONAL_VAR .) ]
+  ! $end            [ reduce using rule 14 (expression -> PROPOSITIONAL_VAR .) ]
+  ! RPAREN          [ reduce using rule 14 (expression -> PROPOSITIONAL_VAR .) ]
 
 
-state 19
+state 21
 
     (6) expression -> expression OPERATOR TRUE .
-    (14) expression -> TRUE .
+    (15) expression -> TRUE .
 
   ! reduce/reduce conflict for OPERATOR resolved using rule 6 (expression -> expression OPERATOR TRUE .)
   ! reduce/reduce conflict for $end resolved using rule 6 (expression -> expression OPERATOR TRUE .)
@@ -395,15 +437,15 @@ state 19
     $end            reduce using rule 6 (expression -> expression OPERATOR TRUE .)
     RPAREN          reduce using rule 6 (expression -> expression OPERATOR TRUE .)
 
-  ! OPERATOR        [ reduce using rule 14 (expression -> TRUE .) ]
-  ! $end            [ reduce using rule 14 (expression -> TRUE .) ]
-  ! RPAREN          [ reduce using rule 14 (expression -> TRUE .) ]
+  ! OPERATOR        [ reduce using rule 15 (expression -> TRUE .) ]
+  ! $end            [ reduce using rule 15 (expression -> TRUE .) ]
+  ! RPAREN          [ reduce using rule 15 (expression -> TRUE .) ]
 
 
-state 20
+state 22
 
     (7) expression -> expression OPERATOR FALSE .
-    (15) expression -> FALSE .
+    (16) expression -> FALSE .
 
   ! reduce/reduce conflict for OPERATOR resolved using rule 7 (expression -> expression OPERATOR FALSE .)
   ! reduce/reduce conflict for $end resolved using rule 7 (expression -> expression OPERATOR FALSE .)
@@ -412,29 +454,29 @@ state 20
     $end            reduce using rule 7 (expression -> expression OPERATOR FALSE .)
     RPAREN          reduce using rule 7 (expression -> expression OPERATOR FALSE .)
 
-  ! OPERATOR        [ reduce using rule 15 (expression -> FALSE .) ]
-  ! $end            [ reduce using rule 15 (expression -> FALSE .) ]
-  ! RPAREN          [ reduce using rule 15 (expression -> FALSE .) ]
+  ! OPERATOR        [ reduce using rule 16 (expression -> FALSE .) ]
+  ! $end            [ reduce using rule 16 (expression -> FALSE .) ]
+  ! RPAREN          [ reduce using rule 16 (expression -> FALSE .) ]
 
 
-state 21
+state 23
 
-    (18) expression -> LPAREN expression RPAREN .
+    (20) expression_paren -> LPAREN expression RPAREN .
 
-    OPERATOR        reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    $end            reduce using rule 18 (expression -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 18 (expression -> LPAREN expression RPAREN .)
+    OPERATOR        reduce using rule 20 (expression_paren -> LPAREN expression RPAREN .)
+    $end            reduce using rule 20 (expression_paren -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 20 (expression_paren -> LPAREN expression RPAREN .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
 WARNING: shift/reduce conflict for OPERATOR in state 2 resolved as shift
-WARNING: shift/reduce conflict for RPAREN in state 11 resolved as shift
-WARNING: shift/reduce conflict for OPERATOR in state 11 resolved as shift
 WARNING: shift/reduce conflict for OPERATOR in state 12 resolved as shift
 WARNING: shift/reduce conflict for OPERATOR in state 12 resolved as shift
-WARNING: shift/reduce conflict for OPERATOR in state 17 resolved as shift
-WARNING: shift/reduce conflict for OPERATOR in state 17 resolved as shift
+WARNING: shift/reduce conflict for RPAREN in state 18 resolved as shift
+WARNING: shift/reduce conflict for OPERATOR in state 18 resolved as shift
+WARNING: shift/reduce conflict for OPERATOR in state 19 resolved as shift
+WARNING: shift/reduce conflict for OPERATOR in state 19 resolved as shift
 WARNING: reduce/reduce conflict in state 2 resolved using rule (calc -> expression)
 WARNING: rejected rule (expression -> expression) in state 2
 WARNING: reduce/reduce conflict in state 12 resolved using rule (expression_negated -> NOT expression)
@@ -445,14 +487,16 @@ WARNING: reduce/reduce conflict in state 14 resolved using rule (expression_nega
 WARNING: rejected rule (expression -> TRUE) in state 14
 WARNING: reduce/reduce conflict in state 15 resolved using rule (expression_negated -> NOT FALSE)
 WARNING: rejected rule (expression -> FALSE) in state 15
-WARNING: reduce/reduce conflict in state 16 resolved using rule (expression_negated -> NOT PROPOSITIONAL_VAR)
-WARNING: rejected rule (expression -> PROPOSITIONAL_VAR) in state 16
-WARNING: reduce/reduce conflict in state 17 resolved using rule (expression -> expression OPERATOR expression)
-WARNING: rejected rule (expression -> expression) in state 17
-WARNING: reduce/reduce conflict in state 18 resolved using rule (expression -> expression OPERATOR PROPOSITIONAL_VAR)
-WARNING: rejected rule (expression -> PROPOSITIONAL_VAR) in state 18
-WARNING: reduce/reduce conflict in state 19 resolved using rule (expression -> expression OPERATOR TRUE)
-WARNING: rejected rule (expression -> TRUE) in state 19
-WARNING: reduce/reduce conflict in state 20 resolved using rule (expression -> expression OPERATOR FALSE)
-WARNING: rejected rule (expression -> FALSE) in state 20
+WARNING: reduce/reduce conflict in state 16 resolved using rule (expression_negated -> NOT expression_paren)
+WARNING: rejected rule (expression -> expression_paren) in state 16
+WARNING: reduce/reduce conflict in state 17 resolved using rule (expression_negated -> NOT PROPOSITIONAL_VAR)
+WARNING: rejected rule (expression -> PROPOSITIONAL_VAR) in state 17
+WARNING: reduce/reduce conflict in state 19 resolved using rule (expression -> expression OPERATOR expression)
+WARNING: rejected rule (expression -> expression) in state 19
+WARNING: reduce/reduce conflict in state 20 resolved using rule (expression -> expression OPERATOR PROPOSITIONAL_VAR)
+WARNING: rejected rule (expression -> PROPOSITIONAL_VAR) in state 20
+WARNING: reduce/reduce conflict in state 21 resolved using rule (expression -> expression OPERATOR TRUE)
+WARNING: rejected rule (expression -> TRUE) in state 21
+WARNING: reduce/reduce conflict in state 22 resolved using rule (expression -> expression OPERATOR FALSE)
+WARNING: rejected rule (expression -> FALSE) in state 22
 WARNING: Rule (expression -> expression) is never reduced

@@ -127,6 +127,7 @@ def p_expression_negated(p):
     | NOT expression_negated
     | NOT TRUE
     | NOT FALSE
+    | NOT expression_paren
     | NOT PROPOSITIONAL_VAR
     '''
     p[0] = parse_tuples((p[1], p[2]))
@@ -136,14 +137,15 @@ def p_expression_simple(p):
     expression : PROPOSITIONAL_VAR
     | TRUE
     | FALSE
-    | expression
     | expression_negated
+    | expression_paren
+    | expression
     '''
     p[0] = parse_expression(p[1])
 
 def p_expression_parentesis(p):
     '''
-    expression : LPAREN expression RPAREN
+    expression_paren : LPAREN expression RPAREN
     '''
     p[0] = p[2]
 

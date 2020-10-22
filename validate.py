@@ -7,7 +7,7 @@ gramatic = {
     "OPERATOR": constants + ["PROPOSITIONAL_VAR", "NOT", "LPAREN"],
     "NOT": ["NOT", "PROPOSITIONAL_VAR", "LPAREN"] + constants,
     "": ["NOT", "PROPOSITIONAL_VAR", "LPAREN"] + constants,
-    "LPAREN": ["LPAREN", "PROPOSITIONAL_VAR"] + constants,
+    "LPAREN": ["LPAREN", "PROPOSITIONAL_VAR", "NOT"] + constants,
     "RPAREN": ["RPAREN", "LPAREN", "PROPOSITIONAL_VAR", "OPERATOR"] + constants,
     "END": ["TRUE", "FALSE", "PROPOSITIONAL_VAR", "RPAREN"]
 }
