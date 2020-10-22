@@ -3,7 +3,6 @@ import ply.yacc as yacc
 import networkx as nx
 from validate import checkGramatic, gramatic, dump_expression
 import matplotlib.pyplot as plt
-import sys
 
 from validate import invalidParentesisCount
 
@@ -98,7 +97,7 @@ def draw_tree(branch, parent, tree_graph, epoch):
         left_leaf, stick, right_leaf = branch
         draw_tree((left_leaf, stick), parent, tree_graph, epoch / 2)
         draw_tree((right_leaf, stick), parent, tree_graph, epoch / 2)
-    if len(branch) == 2:
+    elif len(branch) == 2:
         leaf, stick = branch
 
         if type(leaf) == tuple:
@@ -114,6 +113,8 @@ def draw_tree(branch, parent, tree_graph, epoch):
         else:
             graph.add_edge(parent, stick, weight=epoch)
             graph.add_edge(stick, leaf, weight=epoch)
+    else:
+        graph.add_edge(branch, branch)
 
 
 lexer = lex.lex()
@@ -127,11 +128,6 @@ tests = [
     '~(p^(qor))os'
 ]
 
-# data = '''~~~1o~~(po0)^1'''
-# data = '''~~~1o0'''
-data = str(sys.argv[1]) if len(sys.argv) > 1 else '~p^(0 o z)'
-
-count = 0
 for test in tests:
     plt.clf()
     if invalidParentesisCount(test):
@@ -159,6 +155,7 @@ for test in tests:
         tree = parser.parse(test)
         break
 
+    print(dump_expression(expression))
     graph = nx.DiGraph()
 
     draw_tree(tree, tree, graph, 10)
@@ -167,4 +164,3 @@ for test in tests:
 
     plt.show()
     graph = None
-    count = count + 1
